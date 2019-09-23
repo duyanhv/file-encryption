@@ -1,6 +1,7 @@
 # File Encryption 
 File and folder encryption using Rivest Cipher 4
 ## Getting Started
+### RC4 Description
 RC4 was designed in 1987 by Ron Rivest and is one of the most widely software stream cipher and used in popular protocols, such as SSL (protect Internet traffic), WEP (secure wireless networks) and PDF. It’s considered to be fast and simple in terms of software.
 
 RC4 generates a pseudo-random stream of bits (a key-stream). As with any stream cipher, these can be used for encryption by combining it with the plaintext using bit-wise exclusive-or. Decryption is performed the same way (since exclusive-or is a symmetric operation).
