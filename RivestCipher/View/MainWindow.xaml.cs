@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using RivestCipher.View;
 
 namespace RivestCipher
 {
@@ -44,6 +45,13 @@ namespace RivestCipher
             btnEncrypt.Click += BtnEncrypt_Click;
             btnDecrypt.Click += BtnDecrypt_Click;
             tbPassword.PreviewMouseDown += TbPassword_MouseLeftButtonUp;
+            stackPanelLogin.MouseDown += StackPanelLogin_MouseDown;
+        }
+
+        private void StackPanelLogin_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var loginView = new LoginView();
+            loginView.ShowDialog();
         }
 
         private void TbPassword_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)

@@ -29,7 +29,7 @@
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
             <Button>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Cursor="Hand" Orientation="Horizontal" x:Name="stackPanelLogin">
                     <iconPacks:PackIconFontAwesome Width="24" Height="24" Kind="UserCircleRegular"/>
                     <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Login" />
                 </StackPanel>
