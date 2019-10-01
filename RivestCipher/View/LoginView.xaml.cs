@@ -23,6 +23,21 @@ namespace RivestCipher.View
         public LoginView()
         {
             InitializeComponent();
+
+            buttonMoveToRegister.Click += ButtonMoveToRegister_Click;
+            buttonBackToLogin.Click += ButtonBackToLogin_Click;
+        }
+
+        private void ButtonBackToLogin_Click(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke((Action)(() => tabControlLogin.SelectedIndex = 0));
+            buttonBackToLogin.Visibility = Visibility.Hidden;
+        }
+
+        private void ButtonMoveToRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke((Action)(() => tabControlLogin.SelectedIndex = 1));
+            buttonBackToLogin.Visibility = Visibility.Visible;
         }
     }
 }

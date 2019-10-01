@@ -27,4 +27,57 @@
         </ResourceDictionary>
     </Controls:MetroWindow.Resources>
 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Button Width="34" Height="34" x:Name="buttonBackToLogin" Visibility="Hidden">
+            <iconPacks:PackIconFontAwesome Kind="ArrowLeftSolid" Cursor="Hand"/>
+        </Button>
+        <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TabControl x:Name="tabControlLogin">
+                <TabItem Header="Login" Visibility="Collapsed">
+                    <StackPanel>
+                        <StackPanel HorizontalAlignment="Center" Width="250" Margin="0 0 0 20">
+                            <Label Content="Username" HorizontalAlignment="Center"/>
+                            <TextBox Controls:TextBoxHelper.Watermark="This is a textbox"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center"  Width="250"  Margin="0 0 0 20">
+                            <Label Content="Password" HorizontalAlignment="Center"/>
+                            <PasswordBox Controls:PasswordBoxHelper.CapsLockIcon="True"  Style="{StaticResource MetroButtonRevealedPasswordBox}"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                        </StackPanel>
+
+                        <Button  x:Name="buttonLogin" Margin="0 0 0 10" Style="{StaticResource AccentedSquareButtonStyle}">Login</Button>
+                        <Button x:Name="buttonMoveToRegister">Register</Button>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Register" Visibility="Collapsed">
+                    <StackPanel>
+                        <StackPanel HorizontalAlignment="Center" Width="250" Margin="0 0 0 20">
+                            <Label Content="Username" HorizontalAlignment="Center"/>
+                            <TextBox Controls:TextBoxHelper.Watermark="This is a textbox"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center"  Width="250"  Margin="0 0 0 20">
+                            <Label Content="Password" HorizontalAlignment="Center"/>
+                            <PasswordBox Controls:PasswordBoxHelper.CapsLockIcon="True"  Style="{StaticResource MetroButtonRevealedPasswordBox}"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center"  Width="250"  Margin="0 0 0 20">
+                            <Label Content="Confirm Password" HorizontalAlignment="Center"/>
+                            <PasswordBox Controls:PasswordBoxHelper.CapsLockIcon="True"  Style="{StaticResource MetroButtonRevealedPasswordBox}"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                        </StackPanel>
+
+                        <Button x:Name="buttonRegister" Style="{StaticResource AccentedSquareButtonStyle}">Register</Button>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+    </Grid>
 </Controls:MetroWindow>
