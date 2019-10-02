@@ -1,4 +1,6 @@
 ﻿using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
+using RivestCipher.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +22,45 @@ namespace RivestCipher.View
     /// </summary>
     public partial class LoginView : MetroWindow
     {
-        public LoginView()
+        string _connectionString;
+        UserService _userSerivce;
+        public LoginView(string connectionString)
         {
             InitializeComponent();
-
+            _connectionString = connectionString;
             buttonMoveToRegister.Click += ButtonMoveToRegister_Click;
             buttonBackToLogin.Click += ButtonBackToLogin_Click;
+            buttonLogin.Click += ButtonLogin_Click;
+            buttonRegister.Click += ButtonRegister_Click;
+            _userSerivce = new UserService(_connectionString);
+        }
+
+        private async void ButtonRegister_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var hey = _userSerivce.Create(textBoxRegisterUserName.Text, passwordBoxRegisterPassword.Password);
+
+                if (hey)
+                {
+                    var hey1 = _userSerivce.Login(textBoxRegisterUserName.Text, passwordBoxRegisterPassword.Password);
+                }
+            }catch(Exception ex)
+            {
+                await this.ShowMessageAsync("Error", ex.Message);
+            }
+        }
+
+        private void ButtonLogin_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var hey = _userSerivce.Login(textBoxUserName.Text, textBoxPassword.Password);
+            }
+            catch(Exception ex)
+            {
+                var error = ex;
+            }
         }
 
         private void ButtonBackToLogin_Click(object sender, RoutedEventArgs e)

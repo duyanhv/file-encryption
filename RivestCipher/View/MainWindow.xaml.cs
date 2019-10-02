@@ -18,6 +18,9 @@ namespace RivestCipher
         private static readonly string RIVEST_CIPHER_FOLDER_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RivestCipher_DuyAnh");
         private static readonly string ENCRYPT_FOLDER_PATH = Path.Combine(RIVEST_CIPHER_FOLDER_PATH, "encrypt");
         private static readonly string DECRYPT_FOLDER_PATH = Path.Combine(RIVEST_CIPHER_FOLDER_PATH, "decrypt");
+        private static readonly string SETTING_FOLDER_PATH = Path.Combine(RIVEST_CIPHER_FOLDER_PATH, "setting");
+        private static readonly string USER_FILE_PATH = Path.Combine(SETTING_FOLDER_PATH, "user.xml");
+        private static readonly string DOCUMENT_FILE_PATH = Path.Combine(SETTING_FOLDER_PATH, "document.xml");
         private static List<string> _listEncryptFilePath;
         private enum ErrorType
         {
@@ -28,6 +31,10 @@ namespace RivestCipher
         public MainWindow()
         {
             InitializeComponent();
+            if (!Directory.Exists(SETTING_FOLDER_PATH))
+            {
+                Directory.CreateDirectory(SETTING_FOLDER_PATH);
+            }
             if (!Directory.Exists(RIVEST_CIPHER_FOLDER_PATH))
             {
                 Directory.CreateDirectory(RIVEST_CIPHER_FOLDER_PATH);
@@ -40,6 +47,15 @@ namespace RivestCipher
             {
                 Directory.CreateDirectory(DECRYPT_FOLDER_PATH);
             }
+
+            if (!File.Exists(DOCUMENT_FILE_PATH))
+            {
+                File.Create(DOCUMENT_FILE_PATH);
+            }
+            if (!File.Exists(USER_FILE_PATH))
+            {
+                File.Create(USER_FILE_PATH);
+            }
             _listEncryptFilePath = new List<string>();
             btnOpenFile.Click += BtnOpenFile_Click;
             btnEncrypt.Click += BtnEncrypt_Click;
@@ -50,7 +66,7 @@ namespace RivestCipher
 
         private void StackPanelLogin_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var loginView = new LoginView();
+            var loginView = new LoginView(USER_FILE_PATH);
             loginView.ShowDialog();
         }
 

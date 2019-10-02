@@ -48,14 +48,14 @@
                     <StackPanel>
                         <StackPanel HorizontalAlignment="Center" Width="250" Margin="0 0 0 20">
                             <Label Content="Username" HorizontalAlignment="Center"/>
-                            <TextBox Controls:TextBoxHelper.Watermark="This is a textbox"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                            <TextBox x:Name="textBoxUserName" Controls:TextBoxHelper.ClearTextButton="True"/>
                         </StackPanel>
                         <StackPanel HorizontalAlignment="Center"  Width="250"  Margin="0 0 0 20">
                             <Label Content="Password" HorizontalAlignment="Center"/>
-                            <PasswordBox Controls:PasswordBoxHelper.CapsLockIcon="True"  Style="{StaticResource MetroButtonRevealedPasswordBox}"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                            <PasswordBox x:Name="textBoxPassword" Controls:PasswordBoxHelper.CapsLockIcon="True"  Style="{StaticResource MetroButtonRevealedPasswordBox}"  Controls:TextBoxHelper.ClearTextButton="True"/>
                         </StackPanel>
 
-                        <Button  x:Name="buttonLogin" Margin="0 0 0 10" Style="{StaticResource AccentedSquareButtonStyle}">Login</Button>
+                        <Button x:Name="buttonLogin" Margin="0 0 0 10" Style="{StaticResource AccentedSquareButtonStyle}">Login</Button>
                         <Button x:Name="buttonMoveToRegister">Register</Button>
                     </StackPanel>
                 </TabItem>
@@ -63,11 +63,11 @@
                     <StackPanel>
                         <StackPanel HorizontalAlignment="Center" Width="250" Margin="0 0 0 20">
                             <Label Content="Username" HorizontalAlignment="Center"/>
-                            <TextBox Controls:TextBoxHelper.Watermark="This is a textbox"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                            <TextBox x:Name="textBoxRegisterUserName" Controls:TextBoxHelper.ClearTextButton="True"/>
                         </StackPanel>
                         <StackPanel HorizontalAlignment="Center"  Width="250"  Margin="0 0 0 20">
                             <Label Content="Password" HorizontalAlignment="Center"/>
-                            <PasswordBox Controls:PasswordBoxHelper.CapsLockIcon="True"  Style="{StaticResource MetroButtonRevealedPasswordBox}"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                            <PasswordBox Controls:PasswordBoxHelper.CapsLockIcon="True" x:Name="passwordBoxRegisterPassword"  Style="{StaticResource MetroButtonRevealedPasswordBox}"  Controls:TextBoxHelper.ClearTextButton="True"/>
                         </StackPanel>
                         <StackPanel HorizontalAlignment="Center"  Width="250"  Margin="0 0 0 20">
                             <Label Content="Confirm Password" HorizontalAlignment="Center"/>
