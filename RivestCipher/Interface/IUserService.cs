@@ -12,5 +12,6 @@ namespace RivestCipher.Interface
         bool Create(string UserName, string Password);
         UserModel Login(string UserName, string Password);
         bool Logout(Guid userId);
+        UserModel GetLoggedInUser();
     }
 }

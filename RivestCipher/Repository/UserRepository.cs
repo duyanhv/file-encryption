@@ -85,6 +85,24 @@ namespace RivestCipher.Repository
             return true;
         }
 
+
+        public UserModel GetLoggedInUser()
+        {
+            try
+            {
+                using (FileStream fs = new FileStream(_connectionString, FileMode.Open))
+                {
+                    var users = (List<UserModel>)_serializer.Deserialize(fs);
+
+                    return users.ToList().Where(user => user.IsLoggedIn == true).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public UserModel Get(Guid Id)
         {
             try

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using RivestCipher.View;
+using static RivestCipher.Action.UserProfileAction;
+using System.ComponentModel;
 
 namespace RivestCipher
 {
@@ -31,44 +33,44 @@ namespace RivestCipher
         public MainWindow()
         {
             InitializeComponent();
-            if (!Directory.Exists(SETTING_FOLDER_PATH))
-            {
-                Directory.CreateDirectory(SETTING_FOLDER_PATH);
-            }
-            if (!Directory.Exists(RIVEST_CIPHER_FOLDER_PATH))
-            {
-                Directory.CreateDirectory(RIVEST_CIPHER_FOLDER_PATH);
-            }
-            if (!Directory.Exists(ENCRYPT_FOLDER_PATH))
-            {
-                Directory.CreateDirectory(ENCRYPT_FOLDER_PATH);
-            }
-            if (!Directory.Exists(DECRYPT_FOLDER_PATH))
-            {
-                Directory.CreateDirectory(DECRYPT_FOLDER_PATH);
-            }
-
-            if (!File.Exists(DOCUMENT_FILE_PATH))
-            {
-                File.Create(DOCUMENT_FILE_PATH);
-            }
-            if (!File.Exists(USER_FILE_PATH))
-            {
-                File.Create(USER_FILE_PATH);
-            }
             _listEncryptFilePath = new List<string>();
             btnOpenFile.Click += BtnOpenFile_Click;
             btnEncrypt.Click += BtnEncrypt_Click;
             btnDecrypt.Click += BtnDecrypt_Click;
             tbPassword.PreviewMouseDown += TbPassword_MouseLeftButtonUp;
-            stackPanelLogin.MouseDown += StackPanelLogin_MouseDown;
+            buttonLogin.Click += ButtonLogin_Click;
+            buttonLogout.Click += ButtonLogout_Click;
+
+            CheckUserHasLoggedIn();
         }
 
-        private void StackPanelLogin_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private async void ButtonLogout_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            App.Store.Dispatch(new LogoutAction());
+            CheckUserHasLoggedIn();
+            await this.ShowMessageAsync("Success", "Logout Successfully");
+        }
+
+        private void CheckUserHasLoggedIn()
+        {
+            var isUserLoggedIn = App.Store.GetState().UserProfile != null;
+            buttonLogin.Visibility = !isUserLoggedIn ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            dockPanelLogout.Visibility = isUserLoggedIn ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            labelUserName.Content = isUserLoggedIn ? App.Store.GetState().UserProfile.UserName : String.Empty;
+        }
+
+        private void ButtonLogin_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var loginView = new LoginView(USER_FILE_PATH);
-            loginView.ShowDialog();
+            loginView.Show();
+            loginView.Closing += LoginView_Closing;
         }
+
+        private void LoginView_Closing(object sender, CancelEventArgs e)
+        {
+            CheckUserHasLoggedIn();
+        }
+
 
         private void TbPassword_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {

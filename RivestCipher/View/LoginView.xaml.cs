@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static RivestCipher.Action.UserProfileAction;
 
 namespace RivestCipher.View
 {
@@ -39,39 +40,60 @@ namespace RivestCipher.View
         {
             try
             {
-                var hey = _userSerivce.Create(textBoxRegisterUserName.Text, passwordBoxRegisterPassword.Password);
-
-                if (hey)
+                var userParams = new Model.LoginUserParams
                 {
-                    var hey1 = _userSerivce.Login(textBoxRegisterUserName.Text, passwordBoxRegisterPassword.Password);
-                }
-            }catch(Exception ex)
+                    UserName = textBoxRegisterUserName.Text,
+                    Password = passwordBoxRegisterPassword.Password
+                };
+                App.Store.Dispatch(new RegisterAction
+                {
+                    registerUserParams = userParams
+                });
+                App.Store.Dispatch(new LoginAction
+                {
+                    loginUserParams = userParams
+                });
+                await this.ShowMessageAsync("Success", "Register & Login Successfully");
+                this.Close();
+            }
+            catch(Exception ex)
             {
                 await this.ShowMessageAsync("Error", ex.Message);
             }
         }
 
-        private void ButtonLogin_Click(object sender, RoutedEventArgs e)
+        private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var hey = _userSerivce.Login(textBoxUserName.Text, textBoxPassword.Password);
+                App.Store.Dispatch(new LoginAction
+                {
+                    loginUserParams = new Model.LoginUserParams
+                    {
+                        UserName = textBoxUserName.Text,
+                        Password = textBoxPassword.Password
+                    }
+                });
+                await this.ShowMessageAsync("Success", "Login successfully");
+                this.Close();
             }
             catch(Exception ex)
             {
                 var error = ex;
+                await this.ShowMessageAsync("Error", ex.Message);
             }
         }
 
         private void ButtonBackToLogin_Click(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke((Action)(() => tabControlLogin.SelectedIndex = 0));
+            
+            Dispatcher.BeginInvoke((System.Action)(() => tabControlLogin.SelectedIndex = 0));
             buttonBackToLogin.Visibility = Visibility.Hidden;
         }
 
         private void ButtonMoveToRegister_Click(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke((Action)(() => tabControlLogin.SelectedIndex = 1));
+            Dispatcher.BeginInvoke((System.Action)(() => tabControlLogin.SelectedIndex = 1));
             buttonBackToLogin.Visibility = Visibility.Visible;
         }
     }

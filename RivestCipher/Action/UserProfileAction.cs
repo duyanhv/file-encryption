@@ -1,15 +1,24 @@
 ﻿using Redux;
+using RivestCipher.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RivestCipher.Action
 {
     class UserProfileAction
     {
-        public class LoginAction: IAction { }
-        public class LogoutAction: IAction { }
+        public class LoginAction: IAction
+        {
+            public LoginUserParams loginUserParams { get; set; }      
+        }
+        public class LogoutAction : IAction {
+            public Guid userId { get; set; }
+        }
+        public class GetLoggedInUserAction : IAction
+        {
+        }
+        public class RegisterAction : IAction
+        {
+            public LoginUserParams registerUserParams { get; set; }
+        }
     }
 }

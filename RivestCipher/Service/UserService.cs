@@ -51,6 +51,11 @@ namespace RivestCipher.Service
             return userRepository.Get(Id);
         }
 
+        public UserModel GetLoggedInUser()
+        {
+            return userRepository.GetLoggedInUser();
+        }
+
         public UserModel Login(string userName, string password)
         {
             if (String.IsNullOrWhiteSpace(userName) || String.IsNullOrWhiteSpace(password))

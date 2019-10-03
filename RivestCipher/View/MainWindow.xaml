@@ -28,34 +28,55 @@
     </Controls:MetroWindow.Resources>
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button>
-                <StackPanel Cursor="Hand" Orientation="Horizontal" x:Name="stackPanelLogin">
-                    <iconPacks:PackIconFontAwesome Width="24" Height="24" Kind="UserCircleRegular"/>
-                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Login" />
-                </StackPanel>
-            </Button>
+            <DockPanel>
+                <Button Cursor="Hand" x:Name="buttonLogin">
+                    <StackPanel Orientation="Horizontal" x:Name="stackPanelLogin">
+                        <iconPacks:PackIconFontAwesome Width="24" Height="24" Kind="UserCircleSolid"/>
+                        <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Login" />
+                    </StackPanel>
+                </Button>
+                    <DockPanel x:Name="dockPanelLogout">
+                        <Label FontWeight="Bold" FontSize="15" Name="labelUserName"/>
+                        <Button Cursor="Hand" x:Name="buttonLogout">
+                            <StackPanel Cursor="Hand" Orientation="Horizontal" x:Name="stackPanelLogout" Margin="10 0 0 0">
+                                <iconPacks:PackIconFontAwesome Width="24" Height="24" Kind="SignOutAltSolid"/>
+                                <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="Logout" />
+                            </StackPanel>
+                        </Button>
+                    </DockPanel>
+            </DockPanel>
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
+    <TabControl>
+        <TabItem Header="File">
+            <StackPanel Width="300" HorizontalAlignment="Center" Margin="20">
+                <Label HorizontalAlignment="Center" FontWeight="Bold" FontSize="20">Select Files</Label>
+                <Button Style="{DynamicResource SquareButtonStyle}" x:Name="btnOpenFile" Height="40" Margin="20">Choose Files</Button>
 
-    <StackPanel Width="300" HorizontalAlignment="Center" Margin="20">
-        <Label HorizontalAlignment="Center" FontWeight="Bold" FontSize="20">Select Files</Label>
-        <Button Style="{DynamicResource SquareButtonStyle}" x:Name="btnOpenFile" Height="40" Margin="20">Choose Files</Button>
+                <TextBox  Margin="20" Controls:TextBoxHelper.Watermark="Selected File" IsReadOnly="True" x:Name="tbSelectedFile" />
+                <TextBox Margin="20" Controls:TextBoxHelper.Watermark="Please Input Password" Visibility="Collapsed" x:Name="tbPassword" />
 
-        <TextBox  Margin="20" Controls:TextBoxHelper.Watermark="Selected File" IsReadOnly="True" x:Name="tbSelectedFile" />
-        <TextBox Margin="20" Controls:TextBoxHelper.Watermark="Please Input Password" Visibility="Collapsed" x:Name="tbPassword" />
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" x:Name="btnEncrypt" IsEnabled="False" Style="{StaticResource AccentedSquareButtonStyle}">
+                        Encrypt
+                    </Button>
+                    <Button Grid.Column="1" x:Name="btnDecrypt" IsEnabled="False" Style="{DynamicResource SquareButtonStyle}">
+                        Decrypt
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="User">
+            <DataGrid ItemsSource="{Binding People}" Margin="10,20,10,0"
+                  AutoGenerateColumns="True"
+                  Style="{StaticResource AzureDataGrid}">
 
-        <Grid Margin="20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" x:Name="btnEncrypt" IsEnabled="False" Style="{StaticResource AccentedSquareButtonStyle}">
-                Encrypt
-            </Button>
-            <Button Grid.Column="1" x:Name="btnDecrypt" IsEnabled="False" Style="{DynamicResource SquareButtonStyle}">
-                Decrypt
-            </Button>
-        </Grid>
-    </StackPanel>
-    
+            </DataGrid>
+        </TabItem>
+    </TabControl>
+
 </Controls:MetroWindow>
