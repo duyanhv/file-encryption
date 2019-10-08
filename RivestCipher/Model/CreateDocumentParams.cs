@@ -8,6 +8,7 @@ namespace RivestCipher.Model
 {
     public class CreateDocumentParams
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
         public bool IsEncrypted { get; set; }

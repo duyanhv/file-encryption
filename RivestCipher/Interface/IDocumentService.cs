@@ -10,5 +10,6 @@ namespace RivestCipher.Interface
     public interface IDocumentService: IBaseService<DocumentModel>
     {
         bool Create(string path, bool isEncrypted);
+        bool CreateOrUpdate(DocumentModel createDocumentParams);
     }
 }

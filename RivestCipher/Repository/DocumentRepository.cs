@@ -60,6 +60,39 @@ namespace RivestCipher.Repository
             }
         }
 
+        public bool CreateOrUpdate(DocumentModel createDocumentParams)
+        {
+            try { 
+            var documents = GetAll();
+            var writer = new StreamWriter(_connectionString);
+            var isUpdate = false;
+            if (documents == null || documents.Count < 1)
+            {
+                documents = new List<DocumentModel>();
+            }
+
+            documents.ToList().ForEach(document =>
+            {
+                 if (Guid.Equals(createDocumentParams.Id, document.Id))
+                 {
+                    document = createDocumentParams;
+                    isUpdate = true;
+                 }
+            });
+            if(!isUpdate)
+            {
+               documents.Add(createDocumentParams);
+            }
+            _serializer.Serialize(writer, documents);
+            writer.Close();
+            return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
 
         public bool IsDocumentExists(string filename)
         {

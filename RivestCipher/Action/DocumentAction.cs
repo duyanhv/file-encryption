@@ -12,11 +12,11 @@ namespace RivestCipher.Action
     {
         public class EncryptAction: IAction
         {
-            public DocumentModel createDocumentParams { get; set; }
+            public List<DocumentModel> createDocumentParams { get; set; }
         }
         public class DecryptAction : IAction
         {
-            public DocumentModel createDocumentParams { get; set; }
+            public List<DocumentModel> createDocumentParams { get; set; }
         }
     }
 }

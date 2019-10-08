@@ -47,62 +47,67 @@
             </DockPanel>
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
-    <TabControl>
-        <TabItem Header="File">
-            <StackPanel Width="880" HorizontalAlignment="Center" Margin="20">
-                <DataGrid 
+
+    <StackPanel>
+        <Controls:MetroProgressBar x:Name="progressBar" Margin="0 5 0 0" />
+
+        <TabControl x:Name="tabControlFileManagement">
+            <TabItem Header="File">
+                <StackPanel Width="880" HorizontalAlignment="Center" Margin="20">
+                    <DataGrid 
                     x:Name="dataGridDocuments"
                     AutoGenerateColumns="False" 
                     CanUserAddRows="False"
                     Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                     RowBackground="#fff" FontWeight="Bold" Foreground="#525252"
-                    ScrollViewer.CanContentScroll="True" MaxHeight="290"
+                    Height="220"
+                    ScrollViewer.CanContentScroll="True" MaxHeight="220"
                     AlternatingRowBackground="#f2f2f2" BorderBrush="#000" BorderThickness="1"
                     ScrollViewer.HorizontalScrollBarVisibility="Visible"
                     ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Width="200" Header="Name" Binding="{Binding Path='Name'}" IsReadOnly="True" />
-                        <DataGridTextColumn Width="300" Header="File Path" Binding="{Binding Path='Path'}" IsReadOnly="True" />
-                        <DataGridTextColumn Header="Encrypted" Binding="{Binding Path='IsEncrypted'}" IsReadOnly="True" />
-                        <DataGridTemplateColumn Header="Action">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <DockPanel>
-                                        <Button Name="buttonEncrypt" ToolTip="Encrypt" Content="Action"    />
-                                        <Button Name="buttonDecrypt" ToolTip="Decrypt" Content="Action"  />
-                                    </DockPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <Label HorizontalAlignment="Center" FontWeight="Bold" FontSize="20">Select Files</Label>
-                <Button Style="{DynamicResource SquareButtonStyle}" x:Name="btnOpenFile" Height="40" Margin="20">Choose Files</Button>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="200" Header="Name" Binding="{Binding Path='Name'}" IsReadOnly="True" />
+                            <DataGridTextColumn Width="300" Header="File Path" Binding="{Binding Path='Path'}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Encrypted" Binding="{Binding Path='IsEncrypted'}" IsReadOnly="True" />
+                            <DataGridTemplateColumn Header="Action">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DockPanel>
+                                            <Button Name="buttonEncrypt" ToolTip="Encrypt" Content="Action"    />
+                                            <Button Name="buttonDecrypt" ToolTip="Decrypt" Content="Action"  />
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Style="{DynamicResource SquareButtonStyle}" x:Name="btnOpenFile" Height="40" Margin="20">Choose Files</Button>
 
-                <TextBox  Margin="20" Controls:TextBoxHelper.Watermark="Selected File" IsReadOnly="True" x:Name="tbSelectedFile" />
-                <TextBox Margin="20" Controls:TextBoxHelper.Watermark="Please Input Password" Visibility="Collapsed" x:Name="tbPassword" />
+                    <TextBox  Margin="20" Controls:TextBoxHelper.Watermark="Selected File" IsReadOnly="True" x:Name="tbSelectedFile" />
+                    <TextBox Margin="20" Controls:TextBoxHelper.Watermark="Please Input Password" Visibility="Collapsed" x:Name="tbPassword" />
 
-                <Grid Margin="20">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" x:Name="btnEncrypt" IsEnabled="False" Style="{StaticResource AccentedSquareButtonStyle}">
-                        Encrypt All
-                    </Button>
-                    <Button Grid.Column="1" x:Name="btnDecrypt" IsEnabled="False" Style="{DynamicResource SquareButtonStyle}">
-                        Decrypt all
-                    </Button>
-                </Grid>
-            </StackPanel>
-        </TabItem>
-        <TabItem Header="User">
-            <DataGrid ItemsSource="{Binding People}" Margin="10,20,10,0"
+                    <Grid Margin="20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" x:Name="btnEncrypt" IsEnabled="False" Style="{StaticResource AccentedSquareButtonStyle}">
+                            Encrypt
+                        </Button>
+                        <Button Grid.Column="1" x:Name="btnDecrypt" IsEnabled="False" Style="{DynamicResource SquareButtonStyle}">
+                            Decrypt
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="User">
+                <DataGrid ItemsSource="{Binding People}" Margin="10,20,10,0"
                   AutoGenerateColumns="True"
                   Style="{StaticResource AzureDataGrid}">
 
-            </DataGrid>
-        </TabItem>
-    </TabControl>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+    </StackPanel>
 
 </Controls:MetroWindow>

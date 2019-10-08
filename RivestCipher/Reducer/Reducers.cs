@@ -74,21 +74,23 @@ namespace RivestCipher.Reducer
 
         public static List<DocumentModel> EncryptDocumentReducer(List<DocumentModel> previousState, EncryptAction action)
         {
-            foreach (var document in previousState)
+            var documentService = new DocumentService(App.Store.GetState().DocumentConnectionString);   
+            foreach (var document in action.createDocumentParams)
             {
                 if (!File.Exists(document.Path) || !CanReadFile.Check(document.Path))
                 {
                     continue;
                 }
-                var rc4 = new RC4(tbPassword.Text.Trim(), File.ReadAllBytes(path));
+                var rc4 = new RC4(document.Password.Trim(), File.ReadAllBytes(document.Path));
                 var encryptedFileRaw = rc4.Encrypt();
-                var encryptedFilePath = Path.Combine(ENCRYPT_FOLDER_PATH, string.Join("_", Path.GetFileNameWithoutExtension(path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}", DateTime.Now)));
+                var encryptedFilePath = Path.Combine(App.Store.GetState().DocumentFolder, string.Join("_", Path.GetFileNameWithoutExtension(document.Path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}", DateTime.Now)));
                 File.WriteAllBytes(encryptedFilePath, encryptedFileRaw);
 
-                var decryptedFileRaw = rc4.Decrypt(encryptedFilePath);
-                var decryptedFilePath = Path.Combine(DECRYPT_FOLDER_PATH, string.Join("_", Path.GetFileNameWithoutExtension(path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}.{1}", DateTime.Now, Path.GetExtension(path))));
-                File.WriteAllBytes(decryptedFilePath, decryptedFileRaw);
+                //var decryptedFileRaw = rc4.Decrypt(encryptedFilePath);
+                //var decryptedFilePath = Path.Combine(App.Store.GetState().DocumentFolder, string.Join("_", Path.GetFileNameWithoutExtension(path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}.{1}", DateTime.Now, Path.GetExtension(path))));
+                //File.WriteAllBytes(decryptedFilePath, decryptedFileRaw);
             }
+            return previousState;
         }
 
         public static List<DocumentModel> DocumentsReducer(List<DocumentModel> previousState, IAction action)

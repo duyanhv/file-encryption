@@ -34,6 +34,11 @@ namespace RivestCipher.Service
             return documentRepository.Create(editedPath, isEncrypted);
         }
 
+        public bool CreateOrUpdate(DocumentModel createDocumentParams)
+        {
+            return documentRepository.CreateOrUpdate(createDocumentParams);
+        }
+
         public bool Deactivate(Guid Id)
         {
             throw new NotImplementedException();
