@@ -8,7 +8,7 @@
                       Title="Rivest-cipher-4"
                       ResizeMode="NoResize"
                       Height="600"
-                      Width="400">
+                      Width="900">
     <Controls:MetroWindow.Resources>
 
         <ResourceDictionary >
@@ -49,7 +49,33 @@
     </Controls:MetroWindow.RightWindowCommands>
     <TabControl>
         <TabItem Header="File">
-            <StackPanel Width="300" HorizontalAlignment="Center" Margin="20">
+            <StackPanel Width="880" HorizontalAlignment="Center" Margin="20">
+                <DataGrid 
+                    x:Name="dataGridDocuments"
+                    AutoGenerateColumns="False" 
+                    CanUserAddRows="False"
+                    Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    RowBackground="#fff" FontWeight="Bold" Foreground="#525252"
+                    ScrollViewer.CanContentScroll="True" MaxHeight="290"
+                    AlternatingRowBackground="#f2f2f2" BorderBrush="#000" BorderThickness="1"
+                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="200" Header="Name" Binding="{Binding Path='Name'}" IsReadOnly="True" />
+                        <DataGridTextColumn Width="300" Header="File Path" Binding="{Binding Path='Path'}" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Encrypted" Binding="{Binding Path='IsEncrypted'}" IsReadOnly="True" />
+                        <DataGridTemplateColumn Header="Action">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DockPanel>
+                                        <Button Name="buttonEncrypt" ToolTip="Encrypt" Content="Action"    />
+                                        <Button Name="buttonDecrypt" ToolTip="Decrypt" Content="Action"  />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
                 <Label HorizontalAlignment="Center" FontWeight="Bold" FontSize="20">Select Files</Label>
                 <Button Style="{DynamicResource SquareButtonStyle}" x:Name="btnOpenFile" Height="40" Margin="20">Choose Files</Button>
 
@@ -62,10 +88,10 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" x:Name="btnEncrypt" IsEnabled="False" Style="{StaticResource AccentedSquareButtonStyle}">
-                        Encrypt
+                        Encrypt All
                     </Button>
                     <Button Grid.Column="1" x:Name="btnDecrypt" IsEnabled="False" Style="{DynamicResource SquareButtonStyle}">
-                        Decrypt
+                        Decrypt all
                     </Button>
                 </Grid>
             </StackPanel>

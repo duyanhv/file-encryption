@@ -61,7 +61,7 @@ namespace RivestCipher
 
         private void ButtonLogin_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var loginView = new LoginView(USER_FILE_PATH);
+            var loginView = new LoginView();
             loginView.Show();
             loginView.Closing += LoginView_Closing;
         }

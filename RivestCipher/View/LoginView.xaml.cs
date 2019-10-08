@@ -23,17 +23,13 @@ namespace RivestCipher.View
     /// </summary>
     public partial class LoginView : MetroWindow
     {
-        string _connectionString;
-        UserService _userSerivce;
-        public LoginView(string connectionString)
+        public LoginView()
         {
             InitializeComponent();
-            _connectionString = connectionString;
             buttonMoveToRegister.Click += ButtonMoveToRegister_Click;
             buttonBackToLogin.Click += ButtonBackToLogin_Click;
             buttonLogin.Click += ButtonLogin_Click;
             buttonRegister.Click += ButtonRegister_Click;
-            _userSerivce = new UserService(_connectionString);
         }
 
         private async void ButtonRegister_Click(object sender, RoutedEventArgs e)

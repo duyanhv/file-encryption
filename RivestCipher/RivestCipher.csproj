@@ -95,22 +95,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Action\DocumentAction.cs" />
     <Compile Include="Action\UserProfileAction.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helper\AddNumberToFileName.cs" />
     <Compile Include="Helper\CanReadFile.cs" />
     <Compile Include="Helper\SecurePasswordHasher.cs" />
     <Compile Include="Helper\RC4.cs" />
     <Compile Include="Interface\IBaseService.cs" />
+    <Compile Include="Interface\IDocumentService.cs" />
     <Compile Include="Interface\IUserService.cs" />
     <Compile Include="Model\BaseModel.cs" />
+    <Compile Include="Model\CreateDocumentParams.cs" />
     <Compile Include="Model\DocumentModel.cs" />
     <Compile Include="Model\LoginUserParams.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Reducer\Reducers.cs" />
+    <Compile Include="Repository\DocumentRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
+    <Compile Include="Service\DocumentService.cs" />
     <Compile Include="Service\UserService.cs" />
     <Compile Include="State\ApplicationState.cs" />
     <Compile Include="View\LoginView.xaml.cs">

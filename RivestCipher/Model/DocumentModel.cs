@@ -10,5 +10,7 @@ namespace RivestCipher.Model
     {
         public string Name;
         public string Path;
+        public bool IsEncrypted;
+        public string Password;
     }
 }
