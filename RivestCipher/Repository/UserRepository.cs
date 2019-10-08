@@ -86,6 +86,32 @@ namespace RivestCipher.Repository
         }
 
 
+        public bool UpdateUserDocument(Guid userId, Guid documentId)
+        {
+            try
+            {
+                var users = GetAll();
+                if (users == null)
+                {
+                    return false;
+                }
+                var writer = new StreamWriter(_connectionString);
+                users.ToList().ForEach(user =>
+                {
+                    if(Guid.Equals(userId, user.Id) && !user.Documents.Contains(documentId))
+                    {
+                        user.Documents.Add(documentId);
+                    }
+                });
+                _serializer.Serialize(writer, users);
+                writer.Close();
+                return true;
+            }catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
         public UserModel GetLoggedInUser()
         {
             try

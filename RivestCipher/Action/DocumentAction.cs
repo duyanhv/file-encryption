@@ -18,5 +18,9 @@ namespace RivestCipher.Action
         {
             public List<DocumentModel> createDocumentParams { get; set; }
         }
+        public class GetDocumentsAction: IAction
+        {
+
+        }
     }
 }

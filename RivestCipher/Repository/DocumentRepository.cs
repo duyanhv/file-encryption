@@ -18,13 +18,21 @@ namespace RivestCipher.Repository
             _connectionString = connectionString;
             _serializer = new XmlSerializer(typeof(List<DocumentModel>));
         }
-        public List<DocumentModel> GetAll()
+        public List<DocumentModel> GetAll(List<Guid> Ids = default)
         {
             try
             {
                 using (FileStream fs = new FileStream(_connectionString, FileMode.Open))
                 {
-                    return (List<DocumentModel>)_serializer.Deserialize(fs);
+                    var documents = (List<DocumentModel>)_serializer.Deserialize(fs);
+                    if(Ids == null)
+                    {
+                        return documents.Where(d => d.IsActive).ToList();
+                    }
+                    else
+                    {
+                        return documents.Where(d => d.IsActive && Ids.Contains(d.Id)).ToList();
+                    }
                 }
             }
             catch (Exception ex)

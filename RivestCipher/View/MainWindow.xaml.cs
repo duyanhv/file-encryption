@@ -9,6 +9,8 @@ using System.IO;
 using RivestCipher.View;
 using static RivestCipher.Action.UserProfileAction;
 using System.ComponentModel;
+using static RivestCipher.Action.DocumentAction;
+using RivestCipher.Model;
 
 namespace RivestCipher
 {
@@ -17,12 +19,6 @@ namespace RivestCipher
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private static readonly string RIVEST_CIPHER_FOLDER_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RivestCipher_DuyAnh");
-        private static readonly string ENCRYPT_FOLDER_PATH = Path.Combine(RIVEST_CIPHER_FOLDER_PATH, "encrypt");
-        private static readonly string DECRYPT_FOLDER_PATH = Path.Combine(RIVEST_CIPHER_FOLDER_PATH, "decrypt");
-        private static readonly string SETTING_FOLDER_PATH = Path.Combine(RIVEST_CIPHER_FOLDER_PATH, "setting");
-        private static readonly string USER_FILE_PATH = Path.Combine(SETTING_FOLDER_PATH, "user.xml");
-        private static readonly string DOCUMENT_FILE_PATH = Path.Combine(SETTING_FOLDER_PATH, "document.xml");
         private static List<string> _listEncryptFilePath;
         private enum ErrorType
         {
@@ -40,8 +36,15 @@ namespace RivestCipher
             tbPassword.PreviewMouseDown += TbPassword_MouseLeftButtonUp;
             buttonLogin.Click += ButtonLogin_Click;
             buttonLogout.Click += ButtonLogout_Click;
-
+            BindDocumentDataGrid();
             CheckUserHasLoggedIn();
+        }
+
+        private void BindDocumentDataGrid()
+        {
+            App.Store.Dispatch(new GetDocumentsAction());
+            var hey = App.Store.GetState().Documents;
+            dataGridDocuments.ItemsSource = App.Store.GetState().Documents;
         }
 
         private async void ButtonLogout_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -86,6 +89,26 @@ namespace RivestCipher
                     return;
                 }
                 ChangeControlsStatus(true);
+                foreach (var path in _listEncryptFilePath)
+                {
+                    if (!File.Exists(path) || !CanReadFile.Check(path))
+                    {
+                        continue;
+                    }
+                    App.Store.Dispatch(new DecryptAction
+                    {
+                        createDocumentParams = new List<DocumentModel>
+                        {
+                            new DocumentModel
+                            {
+                                Path = path,
+                                Password = tbPassword.Text.Trim()
+                            }
+                        }
+                    });
+                }
+                BindDocumentDataGrid();
+                Process.Start(App.Store.GetState().DocumentFolder);
             }
             catch(Exception ex)
             {
@@ -112,16 +135,20 @@ namespace RivestCipher
                     {
                         continue;
                     }
-                    var rc4 = new RC4(tbPassword.Text.Trim(), File.ReadAllBytes(path));
-                    var encryptedFileRaw = rc4.Encrypt();
-                    var encryptedFilePath = Path.Combine(ENCRYPT_FOLDER_PATH, string.Join("_", Path.GetFileNameWithoutExtension(path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}", DateTime.Now)));
-                    File.WriteAllBytes(encryptedFilePath, encryptedFileRaw);
-
-                    var decryptedFileRaw = rc4.Decrypt(encryptedFilePath);
-                    var decryptedFilePath = Path.Combine(DECRYPT_FOLDER_PATH, string.Join("_", Path.GetFileNameWithoutExtension(path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}.{1}", DateTime.Now, Path.GetExtension(path))));
-                    File.WriteAllBytes(decryptedFilePath, decryptedFileRaw);
+                    App.Store.Dispatch(new EncryptAction
+                    {
+                        createDocumentParams = new List<DocumentModel>
+                        {
+                            new DocumentModel
+                            {
+                                Path = path,
+                                Password = tbPassword.Text.Trim()
+                            }
+                        }
+                    });
                 }
-                Process.Start(RIVEST_CIPHER_FOLDER_PATH);
+                BindDocumentDataGrid();
+                Process.Start(App.Store.GetState().DocumentFolder);
             }
             catch (Exception ex)
             {
@@ -193,7 +220,7 @@ namespace RivestCipher
         private void EnableEncryption()
         {
             btnEncrypt.IsEnabled = true;
-            //btnDecrypt.IsEnabled = true;
+            btnDecrypt.IsEnabled = true;
         }
     }
 }

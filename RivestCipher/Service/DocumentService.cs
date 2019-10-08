@@ -36,6 +36,7 @@ namespace RivestCipher.Service
 
         public bool CreateOrUpdate(DocumentModel createDocumentParams)
         {
+            createDocumentParams.Path = AddNumberToFileName.GetUniqueFilePath(createDocumentParams.Path);
             return documentRepository.CreateOrUpdate(createDocumentParams);
         }
 
@@ -44,9 +45,9 @@ namespace RivestCipher.Service
             throw new NotImplementedException();
         }
 
-        public List<DocumentModel> GetAll()
+        public List<DocumentModel> GetAll(List<Guid> Id = default)
         {
-            return documentRepository.GetAll();
+            return documentRepository.GetAll(Id);
         }
 
         public DocumentModel GetById(Guid Id)

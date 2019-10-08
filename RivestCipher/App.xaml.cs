@@ -1,15 +1,10 @@
 ﻿using Redux;
-using RivestCipher.Model;
 using RivestCipher.Reducer;
 using RivestCipher.State;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
+using static RivestCipher.Action.DocumentAction;
 using static RivestCipher.Action.UserProfileAction;
 
 namespace RivestCipher
@@ -19,8 +14,6 @@ namespace RivestCipher
     /// </summary>
     public partial class App : Application
     {
-        //https://github.com/GuillaumeSalles/redux.NET/blob/master/examples/todomvc/Redux.TodoMvc/Reducers.cs
-
         private static readonly string RIVEST_CIPHER_FOLDER_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RivestCipher_DuyAnh");
         private static readonly string DOCUMENT_FOLDER_PATH = Path.Combine(RIVEST_CIPHER_FOLDER_PATH, "document");
         private static readonly string SETTING_FOLDER_PATH = Path.Combine(RIVEST_CIPHER_FOLDER_PATH, "setting");
@@ -62,7 +55,6 @@ namespace RivestCipher
             StartupUri = new Uri("./View/MainWindow.xaml", UriKind.Relative);
             Store = new Store<ApplicationState>(Reducers.ReduceApplication, initialState);
             App.Store.Dispatch(new GetLoggedInUserAction());
-
         }
     }
 }

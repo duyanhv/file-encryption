@@ -10,7 +10,7 @@ namespace RivestCipher.Interface
     {
         bool Deactivate(Guid Id);
         bool Activate(Guid Id);
-        List<T> GetAll();
+        List<T> GetAll(List<Guid> Id = default);
         T GetById(Guid Id);
     }
 }

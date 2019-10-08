@@ -74,7 +74,9 @@ namespace RivestCipher.Reducer
 
         public static List<DocumentModel> EncryptDocumentReducer(List<DocumentModel> previousState, EncryptAction action)
         {
-            var documentService = new DocumentService(App.Store.GetState().DocumentConnectionString);   
+            var isUserLoggedIn = App.Store.GetState().UserProfile != null;
+            var documentService = new DocumentService(App.Store.GetState().DocumentConnectionString);
+            var userService = new UserService(App.Store.GetState().UserConnectionString);
             foreach (var document in action.createDocumentParams)
             {
                 if (!File.Exists(document.Path) || !CanReadFile.Check(document.Path))
@@ -85,23 +87,75 @@ namespace RivestCipher.Reducer
                 var encryptedFileRaw = rc4.Encrypt();
                 var encryptedFilePath = Path.Combine(App.Store.GetState().DocumentFolder, string.Join("_", Path.GetFileNameWithoutExtension(document.Path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}", DateTime.Now)));
                 File.WriteAllBytes(encryptedFilePath, encryptedFileRaw);
-
+                documentService.CreateOrUpdate(new DocumentModel
+                {
+                    Id = document.Id == Guid.Empty ? Guid.NewGuid(): document.Id,
+                    Path = encryptedFilePath,
+                    IsEncrypted = true,
+                    Name = Path.GetFileNameWithoutExtension(document.Path),
+                    Password = document.Password.Trim(),
+                    FileExt = Path.GetExtension(document.Path)
+                });
+                if (isUserLoggedIn)
+                {
+                    userService.UpdateUserDocument(App.Store.GetState().UserProfile.Id, document.Id == Guid.Empty ? Guid.NewGuid() : document.Id);
+                }
                 //var decryptedFileRaw = rc4.Decrypt(encryptedFilePath);
                 //var decryptedFilePath = Path.Combine(App.Store.GetState().DocumentFolder, string.Join("_", Path.GetFileNameWithoutExtension(path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}.{1}", DateTime.Now, Path.GetExtension(path))));
                 //File.WriteAllBytes(decryptedFilePath, decryptedFileRaw);
             }
             return previousState;
         }
+        public static List<DocumentModel> DecryptDocumentReducer(List<DocumentModel> previousState, DecryptAction action)
+        {
+            var isUserLoggedIn = App.Store.GetState().UserProfile != null;
+            var documentService = new DocumentService(App.Store.GetState().DocumentConnectionString);
+            var userService = new UserService(App.Store.GetState().UserConnectionString);
+            foreach (var document in action.createDocumentParams)
+            {
+                if (!File.Exists(document.Path) || !CanReadFile.Check(document.Path))
+                {
+                    continue;
+                }
+                var rc4 = new RC4(document.Password.Trim(), File.ReadAllBytes(document.Path));
+                var decryptedFileRaw = rc4.Decrypt(document.Path);
+                var decryptedFilePath = Path.Combine(App.Store.GetState().DocumentFolder, string.Join("_", Path.GetFileNameWithoutExtension(document.Path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}{1}", DateTime.Now, document.FileExt)));
+                File.WriteAllBytes(decryptedFilePath, decryptedFileRaw);
+                documentService.CreateOrUpdate(new DocumentModel
+                {
+                    Id = document.Id == Guid.Empty ? Guid.NewGuid() : document.Id,
+                    Path = decryptedFilePath,
+                    IsEncrypted = false,
+                    Name = Path.GetFileNameWithoutExtension(document.Path),
+                    Password = document.Password.Trim(),
+                    FileExt = document.FileExt
+                });
+                if (isUserLoggedIn)
+                {
+                    userService.UpdateUserDocument(App.Store.GetState().UserProfile.Id, document.Id == Guid.Empty ? Guid.NewGuid() : document.Id);
+                }
+            }
+            return previousState;
+        }
+        public static List<DocumentModel> GetDocumentsReducer(List<DocumentModel> previousState, GetDocumentsAction action)
+        {
+            var documentService = new DocumentService(App.Store.GetState().DocumentConnectionString);
+            return documentService.GetAll(App.Store.GetState().UserProfile != null ? App.Store.GetState().UserProfile.Documents : null);
+        }
 
         public static List<DocumentModel> DocumentsReducer(List<DocumentModel> previousState, IAction action)
         {
             if(action is EncryptAction)
             {
-
+                return EncryptDocumentReducer(previousState, (EncryptAction) action);
             }
             if(action is DecryptAction)
             {
-
+                return DecryptDocumentReducer(previousState, (DecryptAction)action);
+            }
+            if(action is GetDocumentsAction)
+            {
+                return GetDocumentsReducer(previousState, (GetDocumentsAction)action);
             }
             return previousState;
         }

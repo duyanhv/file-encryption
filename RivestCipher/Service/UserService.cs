@@ -41,7 +41,7 @@ namespace RivestCipher.Service
             throw new NotImplementedException();
         }
 
-        public List<UserModel> GetAll()
+        public List<UserModel> GetAll(List<Guid> Id = default)
         {
             return userRepository.GetAll();
         }
@@ -83,6 +83,11 @@ namespace RivestCipher.Service
                 throw new Exception("User Has Not Log Out");
             }
             return true;
+        }
+
+        public bool UpdateUserDocument(Guid userId, Guid documentId)
+        {
+            return userRepository.UpdateUserDocument(userId, documentId);
         }
     }
 }

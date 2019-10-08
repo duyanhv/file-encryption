@@ -8,9 +8,10 @@ namespace RivestCipher.Model
 {
     public class DocumentModel: BaseModel
     {
-        public string Name;
-        public string Path;
-        public bool IsEncrypted;
-        public string Password;
+        public string Name { get; set; }
+        public string Path { get; set; }
+        public bool IsEncrypted { get; set; }
+        public string Password { get; set; }
+        public string FileExt { get; set; }
     }
 }
