@@ -1,0 +1,38 @@
+﻿<Controls:MetroWindow x:Class="RivestCipher.View.InputBox"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                      WindowStartupLocation="CenterScreen"
+                      BorderThickness="1"
+                      Title="Input Box"
+                      ResizeMode="NoResize"
+                      Height="170"
+                      Width="400">
+    <Controls:MetroWindow.Resources>
+
+        <ResourceDictionary >
+            <ResourceDictionary.MergedDictionaries>
+                <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                <!-- Accent and AppTheme setting -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+                <!--<ResourceDictionary Source="/Resources/Icons.xaml" />-->
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Controls:MetroWindow.Resources>
+
+    <StackPanel Margin="10">
+        <Label Content="Password:" FontSize="19" x:Name="labelInputBox"/>
+        <TextBox Controls:TextBoxHelper.Watermark="Please input password" Margin="0 10" x:Name="textBoxInputBox" />
+        <DockPanel HorizontalAlignment="Right">
+            <Button Width="100" Style="{StaticResource AccentedSquareButtonStyle}" x:Name="buttonAccept" Content="submit"/>
+            <Button Width="100" Margin="10 0 0 0" Content="Cancel" x:Name="buttonCancel" Style="{DynamicResource SquareButtonStyle}"/>
+        </DockPanel>
+    </StackPanel>
+</Controls:MetroWindow>

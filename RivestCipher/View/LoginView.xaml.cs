@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -23,17 +24,26 @@ namespace RivestCipher.View
     /// </summary>
     public partial class LoginView : MetroWindow
     {
-        string _connectionString;
-        UserService _userSerivce;
-        public LoginView(string connectionString)
+        public LoginView()
         {
             InitializeComponent();
-            _connectionString = connectionString;
             buttonMoveToRegister.Click += ButtonMoveToRegister_Click;
             buttonBackToLogin.Click += ButtonBackToLogin_Click;
             buttonLogin.Click += ButtonLogin_Click;
             buttonRegister.Click += ButtonRegister_Click;
-            _userSerivce = new UserService(_connectionString);
+            textBoxUserName.KeyUp += TextBoxLogin_KeyUp;
+            textBoxPassword.KeyUp += TextBoxLogin_KeyUp;
+        }
+
+        private void TextBoxLogin_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key != System.Windows.Input.Key.Enter)
+            {
+                return;
+            }
+
+            e.Handled = true;
+            buttonLogin.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         }
 
         private async void ButtonRegister_Click(object sender, RoutedEventArgs e)

@@ -10,6 +10,9 @@ namespace RivestCipher.State
     public class ApplicationState
     {
         public UserModel UserProfile { get; set; }
-        public string ConnectionString { get; set; }
+        public string UserConnectionString { get; set; }
+        public string DocumentConnectionString { get; set; }
+        public string DocumentFolder { get; set; }
+        public List<DocumentModel> Documents { get; set; }
     }
 }

@@ -87,39 +87,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="View\LoginView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="Action\UserProfileAction.cs" />
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Helper\CanReadFile.cs" />
-    <Compile Include="Helper\SecurePasswordHasher.cs" />
-    <Compile Include="Helper\RC4.cs" />
-    <Compile Include="Interface\IBaseService.cs" />
-    <Compile Include="Interface\IUserService.cs" />
-    <Compile Include="Model\BaseModel.cs" />
-    <Compile Include="Model\DocumentModel.cs" />
-    <Compile Include="Model\LoginUserParams.cs" />
-    <Compile Include="Model\UserModel.cs" />
-    <Compile Include="Reducer\Reducers.cs" />
-    <Compile Include="Repository\UserRepository.cs" />
-    <Compile Include="Service\UserService.cs" />
-    <Compile Include="State\ApplicationState.cs" />
-    <Compile Include="View\LoginView.xaml.cs">
-      <DependentUpon>LoginView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -128,6 +95,53 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\InputBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Action\DocumentAction.cs" />
+    <Compile Include="Action\UserProfileAction.cs" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helper\AddNumberToFileName.cs" />
+    <Compile Include="Helper\CanReadFile.cs" />
+    <Compile Include="Helper\SecurePasswordHasher.cs" />
+    <Compile Include="Helper\RC4.cs" />
+    <Compile Include="Interface\IBaseService.cs" />
+    <Compile Include="Interface\IDocumentService.cs" />
+    <Compile Include="Interface\IUserService.cs" />
+    <Compile Include="Model\BaseModel.cs" />
+    <Compile Include="Model\CreateDocumentParams.cs" />
+    <Compile Include="Model\DocumentModel.cs" />
+    <Compile Include="Model\LoginUserParams.cs" />
+    <Compile Include="Model\UserModel.cs" />
+    <Compile Include="Reducer\Reducers.cs" />
+    <Compile Include="Repository\DocumentRepository.cs" />
+    <Compile Include="Repository\UserRepository.cs" />
+    <Compile Include="Service\DocumentService.cs" />
+    <Compile Include="Service\UserService.cs" />
+    <Compile Include="State\ApplicationState.cs" />
+    <Compile Include="ViewConverter\FieldConverter.cs" />
+    <Compile Include="View\InputBox.xaml.cs">
+      <DependentUpon>InputBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -158,14 +172,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controller\" />
+    <Folder Include="ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controller\" />
-    <Folder Include="ViewModel\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
