@@ -3,15 +3,15 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                      xmlns:Converters="clr-namespace:RivestCipher.ViewConverter"
                       WindowStartupLocation="CenterScreen"
                       BorderThickness="1"
                       Title="Rivest-cipher-4"
                       ResizeMode="NoResize"
-                      Height="600"
+                      Height="520"
                       Width="900">
     <Controls:MetroWindow.Resources>
-
-        <ResourceDictionary >
+        <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
@@ -24,6 +24,8 @@
                 <!--<ResourceDictionary Source="/Resources/Icons.xaml" />-->
 
             </ResourceDictionary.MergedDictionaries>
+
+            <Converters:BooleanEncryptTextConverter x:Key="BooleanEncryptTextConverter" />
         </ResourceDictionary>
     </Controls:MetroWindow.Resources>
     <Controls:MetroWindow.RightWindowCommands>
@@ -61,6 +63,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     FontWeight="Bold"
+                        CanUserAddRows="False"
                     Foreground="#525252"
                     ScrollViewer.CanContentScroll="True"
                     AlternatingRowBackground="#f2f2f2" 
@@ -72,36 +75,46 @@
                     ItemsSource="{Binding}"
                     MaxHeight="220">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="200" Header="Name" Binding="{Binding Name}" IsReadOnly="True" />
-                            <DataGridTextColumn Width="300" Header="File Path" Binding="{Binding Path}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Ext" Binding="{Binding FileExt}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Encrypted" Binding="{Binding IsEncrypted}" IsReadOnly="True" />
-                            <DataGridTemplateColumn Header="Action">
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="File Path" Binding="{Binding Path}" IsReadOnly="True" />
+                            <DataGridTextColumn Width="70" Header="Ext" Binding="{Binding FileExt}" IsReadOnly="True" />
+                            <DataGridTextColumn Width="100"  Header="Status" Binding="{Binding IsEncrypted, Converter={StaticResource BooleanEncryptTextConverter}}" IsReadOnly="True" />
+                            <DataGridTemplateColumn Width="147" Header="Action">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <DockPanel>
-                                            <Button Name="buttonEncrypt" ToolTip="Encrypt" Content="Action" />
-                                            <Button Name="buttonDecrypt" ToolTip="Decrypt" Content="Action"  />
+                                            <Button Cursor="Hand" x:Name="buttonEncryptSingleFile" Click="ButtonEncryptDatagridRow_Click" ToolTip="Encrypt" >
+                                                <iconPacks:PackIconFontAwesome Width="24" Height="24" Kind="LockSolid"/>
+                                            </Button>
+                                            <Button Cursor="Hand" x:Name="buttonDecryptSingleFile"  Click="ButtonDecryptDatagridRow_Click" ToolTip="Decrypt" >
+                                                <iconPacks:PackIconFontAwesome Width="24" Height="24" Kind="UnlockSolid"/>
+                                            </Button>
+                                            <Button Cursor="Hand" x:Name="buttonOpenSingleFile" Click="ButtonOpenFileDataGridRow_Click" ToolTip="Open File Location" >
+                                                <iconPacks:PackIconFontAwesome Width="24" Height="24" Kind="FolderOpenSolid"/>
+                                            </Button>
+                                            <Button Cursor="Hand" x:Name="buttonDeleteSingleFile" Click="ButtonDeleteDatagridRow_Click"  ToolTip="Delete" >
+                                                <iconPacks:PackIconFontAwesome Width="24" Height="24" Kind="TrashSolid"/>
+                                            </Button>
                                         </DockPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Style="{DynamicResource SquareButtonStyle}" x:Name="btnOpenFile" Height="40" Margin="20">Choose Files</Button>
+                    <Button Style="{DynamicResource SquareButtonStyle}" x:Name="btnOpenFile" Height="40" Margin="0 10">Choose Files</Button>
 
-                    <TextBox  Margin="20" Controls:TextBoxHelper.Watermark="Selected File" IsReadOnly="True" x:Name="tbSelectedFile" />
-                    <TextBox Margin="20" Controls:TextBoxHelper.Watermark="Please Input Password" Visibility="Collapsed" x:Name="tbPassword" />
+                    <TextBox Margin="0 10" Controls:TextBoxHelper.Watermark="Selected File" IsReadOnly="True" x:Name="tbSelectedFile" />
+                    <TextBox Margin="0 10" Controls:TextBoxHelper.Watermark="Please Input Password" Visibility="Collapsed" x:Name="tbPassword" />
 
-                    <Grid Margin="20">
+                    <Grid Margin="0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" x:Name="btnEncrypt" IsEnabled="True" Style="{StaticResource AccentedSquareButtonStyle}">
+                        <Button Grid.Column="0" x:Name="buttonEncryptSelectedFile" IsEnabled="True" Style="{StaticResource AccentedSquareButtonStyle}">
                             Encrypt
                         </Button>
-                        <Button Grid.Column="1" x:Name="btnDecrypt" IsEnabled="True" Style="{DynamicResource SquareButtonStyle}">
+                        <Button Grid.Column="1" x:Name="buttonDecryptSelectedFile" IsEnabled="True" Style="{DynamicResource SquareButtonStyle}">
                             Decrypt
                         </Button>
                     </Grid>

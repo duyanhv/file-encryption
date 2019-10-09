@@ -36,7 +36,6 @@ namespace RivestCipher.Service
 
         public bool CreateOrUpdate(DocumentModel createDocumentParams)
         {
-            createDocumentParams.Path = AddNumberToFileName.GetUniqueFilePath(createDocumentParams.Path);
             return documentRepository.CreateOrUpdate(createDocumentParams);
         }
 

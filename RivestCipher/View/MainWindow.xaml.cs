@@ -11,6 +11,9 @@ using static RivestCipher.Action.UserProfileAction;
 using System.ComponentModel;
 using static RivestCipher.Action.DocumentAction;
 using RivestCipher.Model;
+using System.Windows.Media;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace RivestCipher
 {
@@ -31,8 +34,8 @@ namespace RivestCipher
             InitializeComponent();
             _listEncryptFilePath = new List<string>();
             btnOpenFile.Click += BtnOpenFile_Click;
-            btnEncrypt.Click += BtnEncrypt_Click;
-            btnDecrypt.Click += BtnDecrypt_Click;
+            buttonEncryptSelectedFile.Click += BtnEncrypt_Click;
+            buttonDecryptSelectedFile.Click += BtnDecrypt_Click;
             tbPassword.PreviewMouseDown += TbPassword_MouseLeftButtonUp;
             buttonLogin.Click += ButtonLogin_Click;
             buttonLogout.Click += ButtonLogout_Click;
@@ -40,17 +43,52 @@ namespace RivestCipher
             CheckUserHasLoggedIn();
         }
 
-        private void BindDocumentDataGrid()
+        private void BindDocumentDataGrid(bool isResetDatagrid = false)
         {
+            App.Store.Dispatch(new GetLoggedInUserAction());
             App.Store.Dispatch(new GetDocumentsAction());
-            var hey = App.Store.GetState().Documents;
-            dataGridDocuments.ItemsSource = App.Store.GetState().Documents;
+            dataGridDocuments.ItemsSource = isResetDatagrid ? null : App.Store.GetState().Documents;
+            dataGridDocuments.Items.Refresh();
+        }
+        private void ButtonEncryptDatagridRow_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var input = new InputBox((sender as Button).DataContext as DocumentModel, true);
+            input.ShowDialog();
+        }
+        private void ButtonDecryptDatagridRow_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var input = new InputBox((sender as Button).DataContext as DocumentModel, false);
+            input.ShowDialog();
+        }
+
+        private void ButtonDeleteDatagridRow_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Do you want to delete this document?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                var data = (sender as Button).DataContext;
+                App.Store.Dispatch(new DeactivateDocumentAction
+                {
+                    deactivateDocumentParams = data as DocumentModel
+                });
+                BindDocumentDataGrid();
+            }
+        }
+
+        private void ButtonOpenFileDataGridRow_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var data = (DocumentModel)(sender as Button).DataContext;
+            if(data != null && !String.IsNullOrWhiteSpace(data.Path) && File.Exists(data.Path))
+            {
+                Process.Start("explorer.exe", "/select," + data.Path);
+            }
         }
 
         private async void ButtonLogout_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             App.Store.Dispatch(new LogoutAction());
             CheckUserHasLoggedIn();
+            BindDocumentDataGrid(true);
             await this.ShowMessageAsync("Success", "Logout Successfully");
         }
 
@@ -72,6 +110,7 @@ namespace RivestCipher
         private void LoginView_Closing(object sender, CancelEventArgs e)
         {
             CheckUserHasLoggedIn();
+            BindDocumentDataGrid();
         }
 
 
@@ -162,10 +201,12 @@ namespace RivestCipher
 
         private void ChangeControlsStatus(bool isLoading)
         {
-            //btnDecrypt.IsEnabled = !isLoading;
-            btnEncrypt.IsEnabled = !isLoading;
-            btnOpenFile.IsEnabled = !isLoading;
-            tbPassword.IsEnabled = !isLoading;
+            //buttonDecryptSelectedFile.IsEnabled = !isLoading;
+            //buttonEncryptSelectedFile.IsEnabled = !isLoading;
+            //btnOpenFile.IsEnabled = !isLoading;
+            //tbPassword.IsEnabled = !isLoading;
+            progressBar.IsIndeterminate = isLoading;
+            tabControlFileManagement.IsEnabled = !isLoading;
         }
 
         private Boolean Validate()
@@ -219,8 +260,8 @@ namespace RivestCipher
 
         private void EnableEncryption()
         {
-            btnEncrypt.IsEnabled = true;
-            btnDecrypt.IsEnabled = true;
+            buttonEncryptSelectedFile.IsEnabled = true;
+            buttonDecryptSelectedFile.IsEnabled = true;
         }
     }
 }

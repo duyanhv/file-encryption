@@ -1,7 +1,9 @@
 ﻿using Redux;
+using RivestCipher.Model;
 using RivestCipher.Reducer;
 using RivestCipher.State;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using static RivestCipher.Action.DocumentAction;
@@ -50,7 +52,7 @@ namespace RivestCipher
                 UserConnectionString = USER_FILE_PATH,
                 DocumentConnectionString = DOCUMENT_FILE_PATH,
                 DocumentFolder = DOCUMENT_FOLDER_PATH,
-                Documents = null
+                Documents = new List<DocumentModel>()
             };
             StartupUri = new Uri("./View/MainWindow.xaml", UriKind.Relative);
             Store = new Store<ApplicationState>(Reducers.ReduceApplication, initialState);

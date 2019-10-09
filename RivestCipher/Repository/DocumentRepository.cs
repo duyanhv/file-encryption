@@ -83,7 +83,13 @@ namespace RivestCipher.Repository
             {
                  if (Guid.Equals(createDocumentParams.Id, document.Id))
                  {
-                    document = createDocumentParams;
+                    document.IsActive = createDocumentParams.IsActive;
+                    document.Path = createDocumentParams.Path;
+                    document.Id = createDocumentParams.Id;
+                    document.FileExt = createDocumentParams.FileExt;
+                    document.IsEncrypted = createDocumentParams.IsEncrypted;
+                    document.Name = createDocumentParams.Name;
+                    document.Password = createDocumentParams.Password;
                     isUpdate = true;
                  }
             });

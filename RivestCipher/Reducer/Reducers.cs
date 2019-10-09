@@ -77,6 +77,7 @@ namespace RivestCipher.Reducer
             var isUserLoggedIn = App.Store.GetState().UserProfile != null;
             var documentService = new DocumentService(App.Store.GetState().DocumentConnectionString);
             var userService = new UserService(App.Store.GetState().UserConnectionString);
+            var newListDocuments = previousState;
             foreach (var document in action.createDocumentParams)
             {
                 if (!File.Exists(document.Path) || !CanReadFile.Check(document.Path))
@@ -85,32 +86,37 @@ namespace RivestCipher.Reducer
                 }
                 var rc4 = new RC4(document.Password.Trim(), File.ReadAllBytes(document.Path));
                 var encryptedFileRaw = rc4.Encrypt();
-                var encryptedFilePath = Path.Combine(App.Store.GetState().DocumentFolder, string.Join("_", Path.GetFileNameWithoutExtension(document.Path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}", DateTime.Now)));
+                var newDocumentName = string.Join("_", Path.GetFileNameWithoutExtension(document.Path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}", DateTime.Now));
+                var encryptedFilePath = Path.Combine(App.Store.GetState().DocumentFolder, newDocumentName);
                 File.WriteAllBytes(encryptedFilePath, encryptedFileRaw);
-                documentService.CreateOrUpdate(new DocumentModel
+                var documentId = document.Id == Guid.Empty ? Guid.NewGuid() : document.Id;
+                var encyptedDocument = new DocumentModel
                 {
-                    Id = document.Id == Guid.Empty ? Guid.NewGuid(): document.Id,
+                    Id = documentId,
                     Path = encryptedFilePath,
                     IsEncrypted = true,
-                    Name = Path.GetFileNameWithoutExtension(document.Path),
+                    Name = Path.GetFileName(newDocumentName),
                     Password = document.Password.Trim(),
                     FileExt = Path.GetExtension(document.Path)
-                });
+                };
                 if (isUserLoggedIn)
                 {
-                    userService.UpdateUserDocument(App.Store.GetState().UserProfile.Id, document.Id == Guid.Empty ? Guid.NewGuid() : document.Id);
+                    documentService.CreateOrUpdate(encyptedDocument);
+                    userService.UpdateUserDocument(App.Store.GetState().UserProfile.Id, documentId);
                 }
-                //var decryptedFileRaw = rc4.Decrypt(encryptedFilePath);
-                //var decryptedFilePath = Path.Combine(App.Store.GetState().DocumentFolder, string.Join("_", Path.GetFileNameWithoutExtension(path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}.{1}", DateTime.Now, Path.GetExtension(path))));
-                //File.WriteAllBytes(decryptedFilePath, decryptedFileRaw);
+                else
+                {
+                    newListDocuments.Add(encyptedDocument);
+                }
             }
-            return previousState;
+            return newListDocuments;
         }
         public static List<DocumentModel> DecryptDocumentReducer(List<DocumentModel> previousState, DecryptAction action)
         {
             var isUserLoggedIn = App.Store.GetState().UserProfile != null;
             var documentService = new DocumentService(App.Store.GetState().DocumentConnectionString);
             var userService = new UserService(App.Store.GetState().UserConnectionString);
+            var newListDocuments = previousState;
             foreach (var document in action.createDocumentParams)
             {
                 if (!File.Exists(document.Path) || !CanReadFile.Check(document.Path))
@@ -118,29 +124,56 @@ namespace RivestCipher.Reducer
                     continue;
                 }
                 var rc4 = new RC4(document.Password.Trim(), File.ReadAllBytes(document.Path));
+                var newDocumentName = string.Join("_", Path.GetFileNameWithoutExtension(document.Path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}{1}", DateTime.Now, document.FileExt));
                 var decryptedFileRaw = rc4.Decrypt(document.Path);
-                var decryptedFilePath = Path.Combine(App.Store.GetState().DocumentFolder, string.Join("_", Path.GetFileNameWithoutExtension(document.Path), string.Format("{0:yyyy-MM-dd_hh-mm-ss-fff}{1}", DateTime.Now, document.FileExt)));
+                var decryptedFilePath = Path.Combine(App.Store.GetState().DocumentFolder, newDocumentName);
                 File.WriteAllBytes(decryptedFilePath, decryptedFileRaw);
-                documentService.CreateOrUpdate(new DocumentModel
+                var documentId = document.Id == Guid.Empty ? Guid.NewGuid() : document.Id;
+                var decyptedDocument = new DocumentModel
                 {
-                    Id = document.Id == Guid.Empty ? Guid.NewGuid() : document.Id,
+                    Id = documentId,
                     Path = decryptedFilePath,
                     IsEncrypted = false,
-                    Name = Path.GetFileNameWithoutExtension(document.Path),
+                    Name = Path.GetFileName(newDocumentName),
                     Password = document.Password.Trim(),
                     FileExt = document.FileExt
-                });
+                };
                 if (isUserLoggedIn)
                 {
-                    userService.UpdateUserDocument(App.Store.GetState().UserProfile.Id, document.Id == Guid.Empty ? Guid.NewGuid() : document.Id);
+                    documentService.CreateOrUpdate(decyptedDocument);
+                    userService.UpdateUserDocument(App.Store.GetState().UserProfile.Id, documentId);
+                }
+                else
+                {
+                    newListDocuments.Add(decyptedDocument);
                 }
             }
-            return previousState;
+            return newListDocuments;
         }
         public static List<DocumentModel> GetDocumentsReducer(List<DocumentModel> previousState, GetDocumentsAction action)
         {
             var documentService = new DocumentService(App.Store.GetState().DocumentConnectionString);
-            return documentService.GetAll(App.Store.GetState().UserProfile != null ? App.Store.GetState().UserProfile.Documents : null);
+            if(App.Store.GetState().UserProfile != null)
+            {
+                return documentService.GetAll(App.Store.GetState().UserProfile != null ? App.Store.GetState().UserProfile.Documents : null);
+            }
+            return previousState;
+        }
+        public static List<DocumentModel> DeactivationDocumentReducer(List<DocumentModel> previousState, DeactivateDocumentAction action)
+        {
+            var documentService = new DocumentService(App.Store.GetState().DocumentConnectionString);
+            var newDocument = action.deactivateDocumentParams;
+            newDocument.IsActive = false;
+            documentService.CreateOrUpdate(newDocument);
+            return previousState;
+        }
+        public static List<DocumentModel> ActivationDocumentReducer(List<DocumentModel> previousState, ActivateDocumentAction action)
+        {
+            var documentService = new DocumentService(App.Store.GetState().DocumentConnectionString);
+            var newDocument = action.deactivateDocumentParams;
+            newDocument.IsActive = true;
+            documentService.CreateOrUpdate(newDocument);
+            return previousState;
         }
 
         public static List<DocumentModel> DocumentsReducer(List<DocumentModel> previousState, IAction action)
@@ -156,6 +189,14 @@ namespace RivestCipher.Reducer
             if(action is GetDocumentsAction)
             {
                 return GetDocumentsReducer(previousState, (GetDocumentsAction)action);
+            }
+            if(action is DeactivateDocumentAction)
+            {
+                return DeactivationDocumentReducer(previousState, (DeactivateDocumentAction)action);
+            }
+            if (action is ActivateDocumentAction)
+            {
+                return ActivationDocumentReducer(previousState, (ActivateDocumentAction)action);
             }
             return previousState;
         }

@@ -22,5 +22,13 @@ namespace RivestCipher.Action
         {
 
         }
+        public class DeactivateDocumentAction : IAction
+        {
+            public DocumentModel deactivateDocumentParams { get; set; }
+        }
+        public class ActivateDocumentAction : IAction
+        {
+            public DocumentModel deactivateDocumentParams { get; set; }
+        }
     }
 }
