@@ -1,0 +1,84 @@
+﻿<Controls:MetroWindow x:Class="RivestCipher.View.LoginView"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                      WindowStartupLocation="CenterScreen"
+                      BorderThickness="1"
+                      Title="Login"
+                      ResizeMode="NoResize"
+                      Height="500"
+                      Width="400">
+    <Controls:MetroWindow.Resources>
+
+        <ResourceDictionary >
+            <ResourceDictionary.MergedDictionaries>
+                <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                <!-- Accent and AppTheme setting -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+                <!--<ResourceDictionary Source="/Resources/Icons.xaml" />-->
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Controls:MetroWindow.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Button Width="34" Height="34" x:Name="buttonBackToLogin" Visibility="Hidden">
+            <iconPacks:PackIconFontAwesome Kind="ArrowLeftSolid" Cursor="Hand"/>
+        </Button>
+        <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TabControl x:Name="tabControlLogin">
+                <TabItem Header="Login" Visibility="Collapsed">
+                    <StackPanel>
+                        <StackPanel HorizontalAlignment="Center" Width="250" Margin="0 0 0 20">
+                            <Label Content="Username" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="textBoxUserName" Controls:TextBoxHelper.ClearTextButton="True"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center"  Width="250"  Margin="0 0 0 20">
+                            <Label Content="Password" HorizontalAlignment="Center"/>
+                            <PasswordBox x:Name="textBoxPassword" Controls:PasswordBoxHelper.CapsLockIcon="True"  Style="{StaticResource MetroButtonRevealedPasswordBox}"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                        </StackPanel>
+
+                        <Button x:Name="buttonLogin" Margin="0 0 0 10" Style="{StaticResource AccentedSquareButtonStyle}">Login</Button>
+                        <Button x:Name="buttonMoveToRegister">Register</Button>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Register" Visibility="Collapsed">
+                    <StackPanel>
+                        <StackPanel HorizontalAlignment="Center" Width="250" Margin="0 0 0 20">
+                            <Label Content="Username" HorizontalAlignment="Center"/>
+                            <TextBox x:Name="textBoxRegisterUserName" Controls:TextBoxHelper.ClearTextButton="True"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center"  Width="250"  Margin="0 0 0 20">
+                            <Label Content="Password" HorizontalAlignment="Center"/>
+                            <PasswordBox Controls:PasswordBoxHelper.CapsLockIcon="True" x:Name="passwordBoxRegisterPassword"  Style="{StaticResource MetroButtonRevealedPasswordBox}"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center"  Width="250"  Margin="0 0 0 20">
+                            <Label Content="Confirm Password" HorizontalAlignment="Center"/>
+                            <PasswordBox Controls:PasswordBoxHelper.CapsLockIcon="True"  Style="{StaticResource MetroButtonRevealedPasswordBox}"  Controls:TextBoxHelper.ClearTextButton="True"/>
+                        </StackPanel>
+
+                        <Button x:Name="buttonRegister" Style="{StaticResource AccentedSquareButtonStyle}">Register</Button>
+
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+    </Grid>
+</Controls:MetroWindow>
